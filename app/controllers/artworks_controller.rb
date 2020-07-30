@@ -16,7 +16,7 @@ class ArtworksController < ApplicationController
     end
 
     def index
-        render json: Artwork.all
+        render json: Artwork.artworks_for_user_id(params[:user_id])
     end
 
     def show
@@ -25,7 +25,7 @@ class ArtworksController < ApplicationController
 
     def update
         artwork = Artwork.find(params[:id])
-        
+
         if artwork.update_attributes(artwork_params)
             render json: artwork
         else
