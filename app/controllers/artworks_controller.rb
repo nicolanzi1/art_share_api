@@ -33,6 +33,36 @@ class ArtworksController < ApplicationController
         end
     end
 
+    def like
+        like = Like.new(user_id: params[:user_id], likeable_id: params[:id], likeable_type: 'Artwork')
+        if like.save
+            render json: like
+        else
+            render json: like.errors.full_messages, status: :unprocessable_entity
+    end
+
+    def unlike
+        like = Like.find_by(user_id: params[:user_id], likeable_id: params[:id], likeable_type: 'Artwork')
+        if like.destroy
+            render json: like
+        else
+            render json: like.errors.full_messages, status: :unprocessable_entity
+    end
+
+    def favorite
+        artwork = Artwork.find_by(:id params[:id], artist_id: params[:user_id])
+        artwork.favorite = true
+        artwork.save
+        render json: artwork
+    end
+
+    def unfavorite
+        artwork = Artwork.find_by(:id, params[:id], artist_id: params[:user_id])
+        artwork.favorite = false
+        artwork.save
+        render json: artwork
+    end
+
     private
     def artwork_params
         params.require(:artwork).permit(:title, :image_url, :artist_id)
