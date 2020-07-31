@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  resources :artworks, only: [:create, :destroy, :show, :update]
+  resources :artworks, only: [:create, :destroy, :show, :update] do
+    post :like, to: 'artworks#like', as: 'like'
+    post :unlike, to: 'artworks#unlike', as: 'unlike'
+  end
 
   resources :artwork_shares, only: [:create, :destroy]
 
-  resources :comments, only: [:create, :destroy, :index]
+  resources :comments, only: [:create, :destroy, :index] do
+    post :like, to: 'comments#like', as: 'like'
+    post :unlike, to: 'comments#unlike', as: 'unlike'
+  end
   
   resources :users, only: [:create, :destroy, :index, :show, :update] do
     resources :artworks, only: [:index]
